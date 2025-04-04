@@ -1,16 +1,19 @@
-version: '3.8'
+version: "3.8"
 
 services:
-
   mysql:
-      image: mysql:8.0
+      image: "mysql:8.0"
+      restart: always
       container_name: mysql
       ports:
-        - "3306:3306"
+        - 3306:3306
+      networks:
+      - springapimysql-net
       environment:
-        MYSQL_ROOT_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+        MYSQL_DATABASE: ${MYSQL_DATASOURCE_DATABASE_NAME}
+        MYSQL_ROOT_PASSWORD: ${MYSQL_DATASOURCE_PASSWORD}
       healthcheck:
-        test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+        test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-psuperclave"]
         interval: 10s
         timeout: 5s
         retries: 10
@@ -18,13 +21,17 @@ services:
   app:
     build: .
     container_name: client-service
+    ports:
+      - 8091:8091
+    networks:
+      - springapimysql-net
     depends_on:
      mysql:
       condition: service_healthy
-    ports:
-      - "8091:8091"
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}?useSSL=false&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
-      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_DATASOURCE_PASSWORD}
+networks:
+  springapimysql-net:
