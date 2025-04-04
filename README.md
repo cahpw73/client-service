@@ -32,6 +32,7 @@ Microservicio desarrollado en Java 21 + Spring Boot 3.3.10 para la gestión de c
 ## 🛠️ Cómo ejecutar con Docker Compose
 
 ### 1. Clonar el proyecto
+Utilizar el branch develop para levantar el proyecto localmente
 ```bash
 git clone https://github.com/tuusuario/client-service.git
 cd client-service
