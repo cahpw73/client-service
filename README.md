@@ -40,10 +40,10 @@ cd client-service
 ### 2. Crear archivo `.env`
 ```env
 SPRING_PROFILES_ACTIVE=dev
-MYSQL_DATABASE=clientdb
-MYSQL_USER=<user>
-MYSQL_PASSWORD=<password>
-MYSQL_HOST=mysql
+SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/clientdb
+SPRING_DATASOURCE_DATABASE_NAME=clientdb
+SPRING_DATASOURCE_USERNAME=root
+SPRING_DATASOURCE_PASSWORD=superclave
 ```
 
 ### 3. Ejecutar
