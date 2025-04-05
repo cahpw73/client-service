@@ -33,7 +33,7 @@ Microservicio desarrollado en Java 21 + Spring Boot 3.3.10 para la gestión de c
 
 ### 1. Clonar el proyecto
 ```bash
-git clone https://github.com/tuusuario/client-service.git
+git clone https://github.com/cahpw73/client-service.git
 cd client-service
 ```
 
@@ -47,8 +47,6 @@ SPRING_DATASOURCE_PASSWORD=superclave
 ```
 
 ### 3. Ejecutar
-Verificar que el profile activado sea el dev en el pom.xml
-
 ```bash
 docker-compose up --build
 ```
@@ -58,7 +56,7 @@ docker-compose up --build
 docker-compose down
 ```
 
-La app estará disponible en: [http://localhost:8091](http://localhost:8091)
+La app estará disponible en: [http://localhost:8080](http://localhost:8080)
 
 ---
 
@@ -77,7 +75,7 @@ Swagger UI queda libre para facilitar documentación, pero todos los endpoints `
 
 Documentación disponible en:
 ```
-http://localhost:8091/swagger-ui/index.html
+http://localhost:8080/swagger-ui/index.html
 ```
 
 ---
