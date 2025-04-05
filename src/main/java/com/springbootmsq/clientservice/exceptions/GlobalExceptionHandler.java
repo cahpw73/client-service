@@ -13,7 +13,9 @@ import com.springbootmsq.clientservice.dtos.ApiError;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -25,32 +27,38 @@ public class GlobalExceptionHandler {
         .findFirst()
         .orElse("Validation failed");
 
+    log.warn("Validation error at {} - {}", request.getRequestURI(), message);
     return buildErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, message, request.getRequestURI());
   }
 
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<ApiError> handleConstraintViolation(ConstraintViolationException ex,
       HttpServletRequest request) {
+    log.warn("Constraint violation at {} - {}", request.getRequestURI(), ex.getMessage());
     return buildErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), request.getRequestURI());
   }
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ApiError> handleGenericException(Exception ex, HttpServletRequest request) {
+    log.error("Unhandled exception at {} - {}", request.getRequestURI(), ex.getMessage(), ex);
     return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), request.getRequestURI());
   }
 
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<ApiError> handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
+    log.info("Resource not found at {} - {}", request.getRequestURI(), ex.getMessage());
     return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage(), request.getRequestURI());
   }
 
   @ExceptionHandler(NoHandlerFoundException.class)
   public ResponseEntity<ApiError> handleNoHandlerFound(NoHandlerFoundException ex, HttpServletRequest request) {
+    log.info("No handler found for {}", request.getRequestURI());
     return buildErrorResponse(HttpStatus.NOT_FOUND, "Endpoint not found", request.getRequestURI());
   }
 
   @ExceptionHandler(BusinessException.class)
   public ResponseEntity<ApiError> handleBusinessException(BusinessException ex, HttpServletRequest request) {
+    log.warn("Business rule violation at {} - {}", request.getRequestURI(), ex.getMessage());
     return buildErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), request.getRequestURI());
   }
 

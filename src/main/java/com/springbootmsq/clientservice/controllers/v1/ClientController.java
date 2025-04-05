@@ -14,7 +14,9 @@ import com.springbootmsq.clientservice.dtos.ClientStatsDTO;
 import com.springbootmsq.clientservice.services.ClientService;
 
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 public class ClientController implements ClientApi {
 
@@ -26,8 +28,12 @@ public class ClientController implements ClientApi {
 
   @Override
   public ResponseEntity<ClientResponseDTO> createClient(@Valid @RequestBody ClientRequestDTO request) {
+    log.info("Received POST /clients request: {}", request);
+
     ClientResponseDTO createdClient = clientService.createClient(request);
   
+    log.info("Client successfully created with ID: {}", createdClient.getId());
+
     return ResponseEntity
         .status(HttpStatus.CREATED)
         .body(createdClient);
@@ -35,11 +41,17 @@ public class ClientController implements ClientApi {
 
   @Override
   public ResponseEntity<List<ClientResponseDTO>> getAllClients() {
-    return ResponseEntity.ok(clientService.getAllClients());
+    log.info("Received GET /clients request");
+    List<ClientResponseDTO> clients = clientService.getAllClients();
+    log.info("Returning {} clients", clients.size());
+    return ResponseEntity.ok(clients);
   }
 
   @Override
   public ResponseEntity<ClientStatsDTO> getClientStats() {
-    return ResponseEntity.ok(clientService.getClientStats());
+    log.info("Received GET /clients/stats request");
+    ClientStatsDTO stats = clientService.getClientStats();
+    log.info("Returning client statistics: averageAge={}, standardDeviation={}", stats.getAverageAge(), stats.getStandardDeviation());
+    return ResponseEntity.ok(stats);
   }
 }
