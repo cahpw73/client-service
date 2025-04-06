@@ -107,6 +107,7 @@ Esto asegura que solo usuarios autorizados puedan consultar el estado del servic
 ## 🧪 Pruebas
 
 Pruebas unitarias disponibles para:
+- `ClientController`
 - `ClientServiceImpl`
 - `StatisticsUtil`
 - `LifeExpectancyUtil`
