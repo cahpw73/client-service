@@ -9,6 +9,8 @@ import com.springbootmsq.clientservice.dtos.ClientStatsDTO;
 public interface ClientService {
 
   ClientResponseDTO createClient(ClientRequestDTO request);
+
   List<ClientResponseDTO> getAllClients();
+
   ClientStatsDTO getClientStats();
 }

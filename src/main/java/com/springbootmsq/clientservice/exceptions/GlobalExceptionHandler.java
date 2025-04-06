@@ -3,11 +3,13 @@ package com.springbootmsq.clientservice.exceptions;
 import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.springbootmsq.clientservice.dtos.ApiError;
 
@@ -60,6 +62,12 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ApiError> handleBusinessException(BusinessException ex, HttpServletRequest request) {
     log.warn("Business rule violation at {} - {}", request.getRequestURI(), ex.getMessage());
     return buildErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage(), request.getRequestURI());
+  }
+
+  @ExceptionHandler(NoResourceFoundException.class)
+  public ResponseEntity<ApiError> handleNoResourceFound(NoResourceFoundException ex, HttpServletRequest request) {
+    log.info("No Resource found for {}", request.getRequestURI());
+    return buildErrorResponse(HttpStatus.NOT_FOUND, "Resource not found", request.getRequestURI());
   }
 
   private ResponseEntity<ApiError> buildErrorResponse(HttpStatus status, String message, String path) {

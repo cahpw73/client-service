@@ -52,6 +52,7 @@ public class ClientServiceImpl implements ClientService {
     log.debug("Fetching all clients from the database");
     List<Client> clients = clientRepository.findAll();
     log.info("Number of clients retrieved: {}", clients.size());
+
     return clients.stream()
         .map(this::toDto)
         .collect(Collectors.toList());
@@ -59,14 +60,15 @@ public class ClientServiceImpl implements ClientService {
 
   private ClientResponseDTO toDto(Client client) {
     ClientResponseDTO dto = ClientResponseDTO.builder()
-            .id(client.getId())
-            .firstName(client.getFirstName())
-            .lastName(client.getLastName())
-            .age(client.getAge())
-            .birthDate(client.getBirthDate())
-            .lifeExpectancy(LifeExpectancyUtil.generateLifeExpectancy())
-            .build();
+        .id(client.getId())
+        .firstName(client.getFirstName())
+        .lastName(client.getLastName())
+        .age(client.getAge())
+        .birthDate(client.getBirthDate())
+        .lifeExpectancy(LifeExpectancyUtil.generateLifeExpectancy())
+        .build();
     log.debug("Mapped client to DTO: {}", dto);
+
     return dto;
   }
 
@@ -76,16 +78,16 @@ public class ClientServiceImpl implements ClientService {
     List<Client> clients = clientRepository.findAll();
 
     if (clients.isEmpty()) {
-        log.warn("No clients found. Returning default statistics.");
-        return ClientStatsDTO.builder()
-                .averageAge(StatisticsUtil.DEFAULT_AVERAGE_AGE)
-                .standardDeviation(StatisticsUtil.DEFAULT_STANDARD_DEVIATION)
-                .build();
+      log.warn("No clients found. Returning default statistics.");
+      return ClientStatsDTO.builder()
+          .averageAge(StatisticsUtil.DEFAULT_AVERAGE_AGE)
+          .standardDeviation(StatisticsUtil.DEFAULT_STANDARD_DEVIATION)
+          .build();
     }
 
     List<Integer> ages = clients.stream()
-            .map(Client::getAge)
-            .toList();
+        .map(Client::getAge)
+        .toList();
 
     double average = StatisticsUtil.calculateAverage(ages);
     double stdDev = StatisticsUtil.calculateStandardDeviation(ages, average);
@@ -93,17 +95,17 @@ public class ClientServiceImpl implements ClientService {
     log.info("Calculated average age: {}, standard deviation: {}", average, stdDev);
 
     return ClientStatsDTO.builder()
-            .averageAge(StatisticsUtil.round(average))
-            .standardDeviation(StatisticsUtil.round(stdDev))
-            .build();
+        .averageAge(StatisticsUtil.round(average))
+        .standardDeviation(StatisticsUtil.round(stdDev))
+        .build();
   }
 
   private void validateClientUniqueness(String firstName, String lastName, int age) {
     log.debug("Validating uniqueness for client: {} {} (age: {})", firstName, lastName, age);
     boolean exists = clientRepository.existsByNameAndAge(firstName, lastName, age);
     if (exists) {
-        log.error("Duplicate client detected: {} {} (age: {})", firstName, lastName, age);
-        throw new BusinessException("A client with the same name and age already exists.");
+      log.error("Duplicate client detected: {} {} (age: {})", firstName, lastName, age);
+      throw new BusinessException("A client with the same name and age already exists.");
     }
   }
 }

@@ -31,6 +31,7 @@ public interface ClientApi {
       @ApiResponse(responseCode = "422", description = "Validation failed", content = @Content(schema = @Schema(implementation = ApiError.class))),
       @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiError.class)))
   })
+
   @PostMapping
   public ResponseEntity<ClientResponseDTO> createClient(@Valid @RequestBody ClientRequestDTO request);
 
@@ -39,6 +40,7 @@ public interface ClientApi {
       @ApiResponse(responseCode = "200", description = "Clients retrieved successfully"),
       @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiError.class)))
   })
+
   @GetMapping
   public ResponseEntity<List<ClientResponseDTO>> getAllClients();
 
@@ -47,6 +49,7 @@ public interface ClientApi {
       @ApiResponse(responseCode = "200", description = "Client statistics retrieved successfully"),
       @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content(schema = @Schema(implementation = ApiError.class)))
   })
+
   @GetMapping("/stats")
   ResponseEntity<ClientStatsDTO> getClientStats();
 }

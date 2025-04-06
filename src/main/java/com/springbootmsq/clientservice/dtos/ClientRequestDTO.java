@@ -31,4 +31,14 @@ public class ClientRequestDTO {
   @Schema(type = "string", format = "date", example = "2000-12-31")
   @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate birthDate;
+
+  public ClientRequestDTO() {
+  }
+
+  public ClientRequestDTO(String firstName, String lastName, Integer age, LocalDate birthDate) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.age = age;
+    this.birthDate = birthDate;
+  }
 }

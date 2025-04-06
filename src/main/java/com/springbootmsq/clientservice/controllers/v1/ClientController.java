@@ -29,9 +29,7 @@ public class ClientController implements ClientApi {
   @Override
   public ResponseEntity<ClientResponseDTO> createClient(@Valid @RequestBody ClientRequestDTO request) {
     log.info("Received POST /clients request: {}", request);
-
     ClientResponseDTO createdClient = clientService.createClient(request);
-  
     log.info("Client successfully created with ID: {}", createdClient.getId());
 
     return ResponseEntity
@@ -44,6 +42,7 @@ public class ClientController implements ClientApi {
     log.info("Received GET /clients request");
     List<ClientResponseDTO> clients = clientService.getAllClients();
     log.info("Returning {} clients", clients.size());
+
     return ResponseEntity.ok(clients);
   }
 
@@ -51,7 +50,9 @@ public class ClientController implements ClientApi {
   public ResponseEntity<ClientStatsDTO> getClientStats() {
     log.info("Received GET /clients/stats request");
     ClientStatsDTO stats = clientService.getClientStats();
-    log.info("Returning client statistics: averageAge={}, standardDeviation={}", stats.getAverageAge(), stats.getStandardDeviation());
+    log.info("Returning client statistics: averageAge={}, standardDeviation={}", stats.getAverageAge(),
+        stats.getStandardDeviation());
+
     return ResponseEntity.ok(stats);
   }
 }
