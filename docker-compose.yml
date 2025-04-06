@@ -6,7 +6,7 @@ services:
       restart: always
       container_name: mysql
       ports:
-        - 3306:3306
+        - 3307:3306
       networks:
       - springapimysql-net
       environment:

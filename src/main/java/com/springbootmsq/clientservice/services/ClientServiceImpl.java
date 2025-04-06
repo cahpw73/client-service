@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springbootmsq.clientservice.dtos.ClientRequestDTO;
 import com.springbootmsq.clientservice.dtos.ClientResponseDTO;
@@ -27,6 +28,7 @@ public class ClientServiceImpl implements ClientService {
     this.clientRepository = clientRepository;
   }
 
+  @Transactional
   @Override
   public ClientResponseDTO createClient(ClientRequestDTO request) {
     log.info("Creating new client: {} {}", request.getFirstName(), request.getLastName());
@@ -47,6 +49,7 @@ public class ClientServiceImpl implements ClientService {
     return toDto(client);
   }
 
+  @Transactional(readOnly = true)
   @Override
   public List<ClientResponseDTO> getAllClients() {
     log.debug("Fetching all clients from the database");
@@ -58,20 +61,7 @@ public class ClientServiceImpl implements ClientService {
         .collect(Collectors.toList());
   }
 
-  private ClientResponseDTO toDto(Client client) {
-    ClientResponseDTO dto = ClientResponseDTO.builder()
-        .id(client.getId())
-        .firstName(client.getFirstName())
-        .lastName(client.getLastName())
-        .age(client.getAge())
-        .birthDate(client.getBirthDate())
-        .lifeExpectancy(LifeExpectancyUtil.generateLifeExpectancy())
-        .build();
-    log.debug("Mapped client to DTO: {}", dto);
-
-    return dto;
-  }
-
+  @Transactional(readOnly = true)
   @Override
   public ClientStatsDTO getClientStats() {
     log.info("Calculating client statistics");
@@ -98,6 +88,20 @@ public class ClientServiceImpl implements ClientService {
         .averageAge(StatisticsUtil.round(average))
         .standardDeviation(StatisticsUtil.round(stdDev))
         .build();
+  }
+
+  private ClientResponseDTO toDto(Client client) {
+    ClientResponseDTO dto = ClientResponseDTO.builder()
+        .id(client.getId())
+        .firstName(client.getFirstName())
+        .lastName(client.getLastName())
+        .age(client.getAge())
+        .birthDate(client.getBirthDate())
+        .lifeExpectancy(LifeExpectancyUtil.generateLifeExpectancy())
+        .build();
+    log.debug("Mapped client to DTO: {}", dto);
+
+    return dto;
   }
 
   private void validateClientUniqueness(String firstName, String lastName, int age) {
